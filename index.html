@@ -284,7 +284,8 @@ const CONFIG = {
 
   // Background music: "builtin" = the short piano loop embedded at the end of this file,
   // or an mp3 URL / file name next to this page (e.g. "song.mp3"). Leave "" for no music.
-  musicUrl: "builtin"
+  musicUrl: "builtin",
+  autoplayMusic: false                  // true = music starts when the guest opens the invitation
 };
 /* ========================================================= */
 
@@ -359,7 +360,8 @@ window.addEventListener("DOMContentLoaded", function () {
     document.getElementById("intro").classList.add("hide");
     document.body.classList.remove("locked");
     document.body.classList.add("opened");
-    if (musicSrc) { const a = document.getElementById("music"); a.volume = 0.6; a.play().catch(() => {}); }
+    // Music stays off until the guest taps the ♪ button (set autoplayMusic: true in CONFIG to start it here)
+    if (musicSrc && CONFIG.autoplayMusic) document.getElementById("music").play().catch(() => {});
   });
 
   // Countdown
@@ -405,7 +407,7 @@ window.addEventListener("DOMContentLoaded", function () {
   // Music
   if (musicSrc) {
     const audio = document.getElementById("music"), btn = document.getElementById("musicBtn");
-    audio.src = musicSrc; btn.style.display = "grid";
+    audio.src = musicSrc; audio.volume = 0.6; btn.style.display = "grid";
     btn.addEventListener("click", () => audio.paused ? audio.play() : audio.pause());
     audio.addEventListener("play", () => btn.classList.add("playing"));
     audio.addEventListener("pause", () => btn.classList.remove("playing"));
